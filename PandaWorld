@@ -14,17 +14,17 @@ public class PandaWorld extends World
     private static final int CELL_SIZE = 50;
 
     // Playable grid size (kept as original 8x8)
-    private static final int PLAY_WIDTH = 15;
-    private static final int PLAY_HEIGHT = 15;
+    private static int PLAY_WIDTH = Levels.currentLevel * 2 + 6;
+    private static int PLAY_HEIGHT = Levels.currentLevel * 2 + 6;
 
     // Frame width (in cells) around the playable board where status is shown
-    private static final int FRAME_SIZE = 1;
+    private static int FRAME_SIZE = 1;
 
     // Actual world size includes frame on all sides
-    private static final int WORLD_WIDTH = PLAY_WIDTH + FRAME_SIZE * 2;
-    private static final int WORLD_HEIGHT = PLAY_HEIGHT + FRAME_SIZE * 2;
+    private static int WORLD_WIDTH = PLAY_WIDTH + 2;
+    private static int WORLD_HEIGHT = PLAY_WIDTH + 2;
 
-    private int level;
+    private int level = Levels.currentLevel;
     private int lives;
     private int score;
     // Game state arrays use PLAY_* sizes (indices are in playable coordinates 0..PLAY_WIDTH-1)
@@ -38,10 +38,14 @@ public class PandaWorld extends World
     public PandaWorld()
     {
         // Create world larger than the playable grid so we can draw a frame around it
-        super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
-        level = 1;
+        super(Levels.currentLevel *2 + 8, Levels.currentLevel *2 + 8, CELL_SIZE);
+        level = Levels.currentLevel;
         lives = 3;
         score = 0;
+        PLAY_WIDTH = Levels.currentLevel * 2 + 6;
+        PLAY_HEIGHT = Levels.currentLevel * 2 + 6;
+        WORLD_WIDTH = PLAY_WIDTH + 2;
+        WORLD_HEIGHT = PLAY_WIDTH + 2;
         // In your World subclass constructor or setup method
         initializeGame();
         prepare();
@@ -58,7 +62,7 @@ public class PandaWorld extends World
         revealedGrid = new boolean[PLAY_WIDTH][PLAY_HEIGHT];
 
         // Place bamboo randomly (uses playable dimensions)
-        int bambooCount = 15 + (level * 2);
+        int bambooCount = 1 + (level * 2);
         placeBambooRandomly(bambooCount);
     }
 
@@ -287,7 +291,8 @@ public class PandaWorld extends World
         level++;
         showText("Level " + (level - 1) + " Complete! Press SPACE for next level",
                  WORLD_WIDTH / 2, 0);
-        Greenfoot.stop();
+        Levels.currentLevel += 1;
+        Greenfoot.setWorld(new PandaWorld());
     }
 
     /**
@@ -297,7 +302,7 @@ public class PandaWorld extends World
     {
         showText("Game Over! Final Score: " + score,
                  WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-        Greenfoot.stop();
+        Greenfoot.setWorld(new PandaWorld());
     }
 
     /**
