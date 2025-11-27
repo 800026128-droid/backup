@@ -62,7 +62,7 @@ public class PandaWorld extends World
         revealedGrid = new boolean[PLAY_WIDTH][PLAY_HEIGHT];
 
         // Place bamboo randomly (uses playable dimensions)
-        int bambooCount = 1 + (level * 2);
+        int bambooCount = 5 + (level * 3);
         placeBambooRandomly(bambooCount);
     }
 
@@ -228,10 +228,9 @@ public class PandaWorld extends World
                 if (i == 0 && j == 0) continue;
                 int newX = x + i;
                 int newY = y + j;
-                if (newX >= 0 && newX < PLAY_WIDTH &&
-                    newY >= 0 && newY < PLAY_HEIGHT &&
-                    bambooGrid[newX][newY]) {
-                    count++;
+                if (newX >= 0 && newX < bambooGrid.length && newY >= 0 && newY < bambooGrid[0].length)
+                    if (bambooGrid[newX][newY]) {
+                        count++;
                 }
             }
         }
